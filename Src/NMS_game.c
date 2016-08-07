@@ -7,6 +7,7 @@ void game_main(){
   Board_t board;
 
   select_level(&board);
+  init_board(&board);
 }
 
 

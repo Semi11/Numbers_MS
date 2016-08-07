@@ -1,7 +1,13 @@
 /*NMS_init.c*/
 
+#include<stdlib.h>
+#include<time.h>
 #include"disp.h"
 #include"NMS_game.h"
+
+void init_ran_num(){
+  srand((unsigned int)time(NULL));
+}
 
 void init_disp(){
   system("resize -s 35 100");//ターミナルのサイズを縦35横100に設定
@@ -19,23 +25,88 @@ void select_level(Board_t *board){
 
   switch(level){
   case EASY:
-    board->width=EASY_WIDTH;
-    board->height=EASY_HEIGHT;
-    board->bom=EASY_BOM_NUM;
+    board->width = EASY_WIDTH;
+    board->height = EASY_HEIGHT;
+    board->bom_num = EASY_MINE_NUM;
     break;
   case NORMAL:
-    board->width=NORMAL_WIDTH;
-    board->height=NORMAL_HEIGHT;
-    board->bom=NORMAL_BOM_NUM;
+    board->width = NORMAL_WIDTH;
+    board->height = NORMAL_HEIGHT;
+    board->bom_num = NORMAL_MINE_NUM;
     break;
   case HARD:
-    board->width=HARD_WIDTH;
-    board->height=HARD_HEIGHT;
-    board->bom=HARD_BOM_NUM;
+    board->width = HARD_WIDTH;
+    board->height = HARD_HEIGHT;
+    board->bom_num = HARD_MINE_NUM;
     break;
   }
 }
 
+void count_around_mines(Board_t *board,int pos){
+  /* 上３つ */
+  if(pos - board->width >=0){
+    if(board->chip[pos-board->width].data == MINE){board->chip[pos].data++;//上
+    }if((pos % board->width) != 0){
+      if(board->chip[pos-board->width-1].data == MINE)board->chip[pos].data++;//左上
+    }if((pos +1% board->width) != 0)
+       if(board->chip[pos-board->width-1].data == MINE)board->chip[pos].data++;//右上
+  }
+
+  /* 下３つ */
+  if(pos + board->width < board->width * board->height){
+    if(board->chip[pos+board->width].data == MINE){board->chip[pos].data++;//下
+    }if((pos % board->width) != 0){
+      if(board->chip[pos+board->width-1].data == MINE)board->chip[pos].data++;//左下
+    }if((pos +1% board->width) != 0)
+       if(board->chip[pos+board->width+1].data == MINE)board->chip[pos].data++;//右下
+  }
+
+  /* 横２つ */
+  if((pos % board->width) != 0)
+    if(board->chip[pos-1].data == MINE)board->chip[pos].data++;//左
+  if((pos +1% board->width) != 0)
+    if(board->chip[pos+1].data == MINE)board->chip[pos].data++;//右
+
+}
+
+void init_board(Board_t *board){
+  int i,board_size=board->width * board->height;
+
+  /* 動的メモリ確保 */
+  board->chip=(Chip_t *)malloc(sizeof(Chip_t) * board_size);
+  if(board->chip==NULL){
+    _CLRDISP();
+    disp_str("error:ボードのメモリ確保に失敗",0,0,RED);
+    exit(1);
+  }  
+
+  /* ボードの状態を全てcloseにし、個数分だけ地雷を設置 */
+  for(i=0;i<board_size;i++){
+    board->chip[i].status=STA_CLOSE;
+    if(i < board->bom_num)board->chip[i].data=MINE;
+    else board->chip[i].data=NONE;
+  }
+    
+  /* 地雷を全てシャッフルする */
+  for(i=0;i<board_size;i++){
+    int j = get_ran_num(0,board_size-1);
+    int buf = board->chip[i].data;
+    board->chip[i].data = board->chip[j].data;
+    board->chip[j].data = buf;
+  }
+
+  /* 周りにある地雷の数をカウント */
+  for(i=0;i<board_size;i++){
+    if(board->chip[i].data == NONE){
+      count_around_mines(board,i);
+    }
+  }
+
+}
+
+int get_ran_num(int min,int max){
+  return min + (int)(rand()*(max-min+1.0)/(1.0+RAND_MAX));
+}
 
 
 

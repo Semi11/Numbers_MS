@@ -14,9 +14,17 @@
 #define NORMAL_HEIGHT 16
 #define HARD_WIDTH 25
 #define HARD_HEIGHT 25
-#define EASY_BOM_NUM 10
-#define NORMAL_BOM_NUM 40
-#define HARD_BOM_NUM 99 
+#define EASY_MINE_NUM 10
+#define NORMAL_MINE_NUM 40
+#define HARD_MINE_NUM 99 
+#define NONE 0
+#define MINE -1
+
+enum {
+  STA_CLOSE,
+  STA_OPEN,
+  STA_FLG,
+};
 
 typedef struct{
   int status;
@@ -27,7 +35,7 @@ typedef struct{
   Chip_t *chip;
   int width;
   int height;
-  int bom;
+  int bom_num;
 }Board_t;
 
 void game_main();//ゲームのメインループ
