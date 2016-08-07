@@ -1,5 +1,18 @@
 /*NMS_title.c*/
 
-void title(){
+#include"disp.h"
 
+void title(void){
+  disp_str("Please press [Enter]",0,0,RED);
+  _PRESSENTER();
 }
+
+
+
+
+
+
+
+
+
+
