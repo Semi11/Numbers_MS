@@ -1,9 +1,12 @@
 #include<stdio.h>
-#include<stdbool.h>
+#include"NMS_init.h"
+#include"NMS_title.h"
+#include"NMS_game.h"
 
 int main(void){
+  init_disp();
   
-  while(true){
+  while(1){
     title();
     game_main();
   }
