@@ -6,8 +6,17 @@
 #include"NMS_game.h"
 
 void init_disp();//画面の初期化
+void select_level(Board_t *board);
 
 #endif
+
+
+
+
+
+
+
+
 
 
 

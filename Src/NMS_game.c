@@ -4,7 +4,9 @@
 #include "NMS_init.h"
 
 void game_main(){
+  Board_t board;
 
+  select_level(&board);
 }
 
 
