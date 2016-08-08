@@ -20,6 +20,8 @@ int input_num(int *num){
   char buf[100];
   int i=0;  
 
+  *num='\0';
+
   fgets(buf,sizeof(buf),stdin);
 
   while(buf[i]!='\n'){

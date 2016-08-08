@@ -13,7 +13,7 @@ void game_main(){
   
   while(game_flg){
     disp_board(board);
-    _PRESSENTER();
+    select_square(&board);
   }
 
 }
@@ -69,9 +69,38 @@ void disp_board(const Board_t board){
 }
       
 void select_square(Board_t *board){
-  int select;
-  input_num(&select);
+  int sq_num,action;
+  const int disp_x = board->width*2 +5;
+  const int disp_y = 5;
+
+  disp_str("マスを選んでください->",disp_x,disp_y,WHITE);
+
+  if(input_num(&sq_num))return;
+  if(sq_num<0 || sq_num>=(board->width*board->height))return;
+
+  disp_str("行動を選んでください",disp_x,disp_y+1,WHITE);
+  disp_str("0:開く",disp_x,disp_y+2,GREEN);
+  disp_str("1:旗を立てる",disp_x,disp_y+3,BLUE);
+  disp_str("2:キャンセル",disp_x,disp_y+4,YELLOW);
+  disp_str("Select(0~2)->",disp_x,disp_y+5,WHITE);
+
+  if(input_num(&action))return;
+  switch(action){
+  case SLC_OPEN:
+    board->squares[sq_num].status=STA_OPEN;
+    break;
+  case SLC_FLG:
+    board->squares[sq_num].status=STA_FLG;
+    break;
+  default:return;
+  }
+
 }
+
+void open_none(Board_t *board,int sq_num){
+
+}
+
 
 
 
