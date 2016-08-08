@@ -29,10 +29,10 @@ enum {
 typedef struct{
   int status;
   int data;
-}Chip_t;
+}Square_t;
 
 typedef struct{
-  Chip_t *chip;
+  Square_t *squares;
   int width;
   int height;
   int bom_num;

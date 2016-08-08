@@ -6,10 +6,12 @@
 
 void game_main(){
   Board_t board;
+  int game_flg=1;
 
-  while(1){
-    select_level(&board);
-    init_board(&board);
+  select_level(&board);
+  init_board(&board);
+  
+  while(game_flg){
     disp_board(board);
     _PRESSENTER();
   }
@@ -25,11 +27,11 @@ void disp_board(const Board_t board){
   _CLRDISP();
 
   for(i=board.width * board.height-1;i >= 0 ;i--){
-    int data=board.chip[i].data;
+    int data=board.squares[i].data;
     x = i%board.width*2+board_pos_x+wall;
     y = i/board.width+board_pos_y+wall;
 
-    switch(board.chip[i].status){
+    switch(board.squares[i].status){
     case STA_CLOSE:
       disp_str("#",x,y,WHITE);break;
     case STA_OPEN:
@@ -66,7 +68,10 @@ void disp_board(const Board_t board){
 
 }
       
-
+void select_square(Board_t *board){
+  int select;
+  input_num(&select);
+}
 
 
 
