@@ -10,6 +10,11 @@ void disp_str(char str[],int x,int y,int color){
   printf("%c[39m",ESC);//文字色を元に戻す
 }
 
+void disp_num(int num,int x,int y,int color){ 
+  printf("%c[%dm",ESC,color);
+  printf("%c[%d;%dH %d",ESC,y,x,num);
+  printf("%c[39m",ESC);//文字色を元に戻す
+}
 void input_num(int *num){
   char buf[100];
   

@@ -17,7 +17,8 @@
 #define _CLRDISP()  printf("%c[2J",ESC);//画面をクリア
 #define _PRESSENTER() while(getchar()!='\n');//Enterキー入力待機
 
-void disp_str(char str[],int x,int y,int color);//座標、文字色を指定して出力
+void disp_str(char str[],int x,int y,int color);//座標、文字色を指定して文字列を出力
+void disp_num(int num,int x,int y,int color);//座標、文字色を指定して数字を出力
 void input_num(int *num);//数字の入力
 
 #endif
