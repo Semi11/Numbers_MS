@@ -18,13 +18,15 @@ void init_disp(){
 void select_level(Board_t *board){
   int level,flg=1;
   while(flg){
-    flg=0;
+    _CLRDISP();
     disp_str("難易度を選んでください",0,0,WHITE);
     disp_str("0:Easy",0,2,GREEN);
     disp_str("1:Normal",0,3,YELLOW);
     disp_str("2:Hard",0,4,RED);
     disp_str("Select(0~2)->",0,6,WHITE);
-    input_num(&level);
+    if(input_num(&level))continue;
+   
+    flg=0;
 
     switch(level){
     case EASY:
@@ -46,8 +48,8 @@ void select_level(Board_t *board){
       flg=1;
       break;
     }
-    _CLRDISP();
   }
+  _CLRDISP();
 }
 
 void init_board(Board_t *board){
