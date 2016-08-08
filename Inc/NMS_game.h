@@ -37,12 +37,15 @@ typedef struct{
   Square_t *squares;
   int width;
   int height;
+  int size;
   int bom_num;
 }Board_t;
 
 void game_main();//ゲームのメインループ
 void disp_board(const Board_t board);//ボードの表示
 void select_square(Board_t *board);//マスの選択
+void open_square(Board_t *board,int pos);//マスを開く
+void open_none(Board_t *board,int pos);//周りに地雷のないマスを開く
 
 #endif
 

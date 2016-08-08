@@ -26,7 +26,7 @@ void disp_board(const Board_t board){
 
   _CLRDISP();
 
-  for(i=board.width * board.height-1;i >= 0 ;i--){
+  for(i=board.size-1;i >= 0 ;i--){
     int data=board.squares[i].data;
     x = i%board.width*2+board_pos_x+wall;
     y = i/board.width+board_pos_y+wall;
@@ -87,7 +87,7 @@ void select_square(Board_t *board){
   if(input_num(&action))return;
   switch(action){
   case SLC_OPEN:
-    board->squares[sq_num].status=STA_OPEN;
+    open_square(board,sq_num);
     break;
   case SLC_FLG:
     board->squares[sq_num].status=STA_FLG;
@@ -97,7 +97,72 @@ void select_square(Board_t *board){
 
 }
 
-void open_none(Board_t *board,int sq_num){
+void open_square(Board_t *board,int pos){
+  if(board->squares[pos].status != STA_CLOSE)return;
+  
+  switch(board->squares[pos].data){
+  case NONE:open_none(board,pos);break;
+  case MINE:
+  default:board->squares[pos].status = STA_OPEN;
+  }
+
+}
+
+void open_none(Board_t *board,int pos){
+  const int width = board->width;
+  const int height = board->height;
+  int x = pos % board->width;
+  int y = pos / board->width; 
+
+  board->squares[pos].status = STA_OPEN;
+
+  /* 上３つ */
+  if(y-1 >= 0){
+    if(board->squares[_GETPOS(x,y-1,width)].data == NONE && board->squares[_GETPOS(x,y-1,width)].status == STA_CLOSE){
+      open_none(board,_GETPOS(x,y-1,width));//上
+    }
+    board->squares[_GETPOS(x,y-1,width)].status = STA_OPEN;
+    if(x-1 >= 0){
+      if(board->squares[_GETPOS(x-1,y-1,width)].data == NONE && board->squares[_GETPOS(x-1,y-1,width)].status == STA_CLOSE)
+	open_none(board,_GETPOS(x-1,y-1,width));//左上
+      board->squares[_GETPOS(x-1,y-1,width)].status = STA_OPEN;    
+    }
+    if(x+1 < width){
+      if(board->squares[_GETPOS(x+1,y-1,width)].data == NONE && board->squares[_GETPOS(x+1,y-1,width)].status == STA_CLOSE)
+	open_none(board,_GETPOS(x+1,y-1,width));//右上
+      board->squares[_GETPOS(x+1,y-1,width)].status = STA_OPEN;
+    }
+  }
+
+  /* 下３つ */
+  if(y+1 < height){
+    if(board->squares[_GETPOS(x,y+1,width)].data == NONE && board->squares[_GETPOS(x,y+1,width)].status == STA_CLOSE){
+      open_none(board,_GETPOS(x,y+1,width));//下
+    }
+    board->squares[_GETPOS(x,y+1,width)].status = STA_OPEN;
+    if(x-1 >= 0){
+      if(board->squares[_GETPOS(x-1,y+1,width)].data == NONE && board->squares[_GETPOS(x-1,y+1,width)].status == STA_CLOSE)
+	open_none(board,_GETPOS(x-1,y+1,width));//左下
+      board->squares[_GETPOS(x-1,y+1,width)].status = STA_OPEN;
+    }
+    if(x+1 < width){
+      if(board->squares[_GETPOS(x+1,y+1,width)].data == NONE && board->squares[_GETPOS(x+1,y+1,width)].status == STA_CLOSE)
+	open_none(board,_GETPOS(x+1,y+1,width));//右下
+      board->squares[_GETPOS(x+1,y+1,width)].status = STA_OPEN;
+    }
+  }
+
+  /* 横２つ */
+  if(x-1 >=0){
+      if(board->squares[_GETPOS(x-1,y,width)].data == NONE && board->squares[_GETPOS(x-1,y,width)].status == STA_CLOSE)
+      open_none(board,_GETPOS(x-1,y,width));//左
+      board->squares[_GETPOS(x-1,y,width)].status = STA_OPEN;
+  }
+  if(x+1 < width){
+    if(board->squares[_GETPOS(x+1,y,width)].data == NONE && board->squares[_GETPOS(x+1,y,width)].status == STA_CLOSE)
+      open_none(board,_GETPOS(x+1,y,width));//右
+    board->squares[_GETPOS(x+1,y,width)].status = STA_OPEN;
+  }
 
 }
 

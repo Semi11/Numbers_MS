@@ -46,17 +46,19 @@ void select_level(Board_t *board){
       break;
     default:
       flg=1;
+      continue;
       break;
     }
+    board->size = board->width * board->height;
   }
   _CLRDISP();
 }
 
 void init_board(Board_t *board){
-  int i,board_size=board->width * board->height;
+  int i;
 
   /* 動的メモリ確保 */
-  board->squares=(Square_t *)malloc(sizeof(Square_t) * board_size);
+  board->squares=(Square_t *)malloc(sizeof(Square_t) * board->size);
   if(board->squares==NULL){
     _CLRDISP();
     disp_str("error:ボードのメモリ確保に失敗",0,0,RED);
@@ -64,22 +66,22 @@ void init_board(Board_t *board){
   }  
 
   /* ボードの状態を全て初期状態にし、個数分だけ地雷を設置 */
-  for(i=0;i<board_size;i++){
+  for(i=0;i<board->size;i++){
     board->squares[i].status=INIT_STA;
     if(i < board->bom_num)board->squares[i].data=MINE;
     else board->squares[i].data=NONE;
   }
     
   /* 地雷を全てシャッフルする */
-  for(i=0;i<board_size;i++){
-    int j = get_ran_num(0,board_size-1);
+  for(i=0;i<board->size;i++){
+    int j = get_ran_num(0,board->size-1);
     int buf = board->squares[i].data;
     board->squares[i].data = board->squares[j].data;
     board->squares[j].data = buf;
   }
 
   /* 周りにある地雷の数をカウント */
-  for(i=0;i<board_size;i++){
+  for(i=0;i<board->size;i++){
     if(board->squares[i].data == NONE){
       count_around_mines(board,i);
     }
