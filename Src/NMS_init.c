@@ -3,6 +3,7 @@
 #include<stdlib.h>
 #include<time.h>
 #include"NMS_io.h"
+#include"NMS_init.h"
 #include"NMS_game.h"
 
 void init_ran_num(){
@@ -49,33 +50,6 @@ void select_level(Board_t *board){
   }
 }
 
-void count_around_mines(Board_t *board,int pos){
-  /* 上３つ */
-  if(pos - board->width >=0){
-    if(board->chip[pos-board->width].data == MINE){board->chip[pos].data++;//上
-    }if((pos % board->width) != 0){
-      if(board->chip[pos-board->width-1].data == MINE)board->chip[pos].data++;//左上
-    }if((pos +1% board->width) != 0)
-       if(board->chip[pos-board->width-1].data == MINE)board->chip[pos].data++;//右上
-  }
-
-  /* 下３つ */
-  if(pos + board->width < board->width * board->height){
-    if(board->chip[pos+board->width].data == MINE){board->chip[pos].data++;//下
-    }if((pos % board->width) != 0){
-      if(board->chip[pos+board->width-1].data == MINE)board->chip[pos].data++;//左下
-    }if((pos +1% board->width) != 0)
-       if(board->chip[pos+board->width+1].data == MINE)board->chip[pos].data++;//右下
-  }
-
-  /* 横２つ */
-  if((pos % board->width) != 0)
-    if(board->chip[pos-1].data == MINE)board->chip[pos].data++;//左
-  if((pos +1% board->width) != 0)
-    if(board->chip[pos+1].data == MINE)board->chip[pos].data++;//右
-
-}
-
 void init_board(Board_t *board){
   int i,board_size=board->width * board->height;
 
@@ -87,9 +61,9 @@ void init_board(Board_t *board){
     exit(1);
   }  
 
-  /* ボードの状態を全てcloseにし、個数分だけ地雷を設置 */
+  /* ボードの状態を全て初期状態にし、個数分だけ地雷を設置 */
   for(i=0;i<board_size;i++){
-    board->chip[i].status=STA_OPEN;//CLOSE;
+    board->chip[i].status=INIT_STA;
     if(i < board->bom_num)board->chip[i].data=MINE;
     else board->chip[i].data=NONE;
   }
@@ -107,6 +81,48 @@ void init_board(Board_t *board){
     if(board->chip[i].data == NONE){
       count_around_mines(board,i);
     }
+  }
+
+}
+
+void count_around_mines(Board_t *board,int pos){
+  const int width = board->width;
+  const int height = board->height;
+  int x = pos % board->width;
+  int y = pos / board->width; 
+
+  /* 上３つ */
+  if(y-1 >= 0){
+    if(board->chip[_GETPOS(x,y-1,width)].data == MINE){
+      board->chip[pos].data++;//上
+    }
+    if(x-1 >= 0){
+      if(board->chip[_GETPOS(x-1,y-1,width)].data == MINE)board->chip[pos].data++;//左上
+    }
+    if(x+1 < width){
+      if(board->chip[_GETPOS(x+1,y-1,width)].data == MINE)board->chip[pos].data++;//右上
+    }
+  }
+
+  /* 下３つ */
+  if(y+1 < height){
+    if(board->chip[_GETPOS(x,y+1,width)].data == MINE){
+      board->chip[pos].data++;//下
+    }
+    if(x-1 >= 0){
+      if(board->chip[_GETPOS(x-1,y+1,width)].data == MINE)board->chip[pos].data++;//左下
+    }
+    if(x+1 < width){
+      if(board->chip[_GETPOS(x+1,y+1,width)].data == MINE)board->chip[pos].data++;//右下
+    }
+  }
+
+  /* 横２つ */
+  if(x-1 >=0){
+    if(board->chip[_GETPOS(x-1,y,width)].data == MINE)board->chip[pos].data++;//左
+  }
+  if(x+1 < width){
+    if(board->chip[_GETPOS(x+1,y,width)].data == MINE)board->chip[pos].data++;//右
   }
 
 }

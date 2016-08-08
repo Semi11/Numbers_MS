@@ -5,6 +5,9 @@
 
 #include"NMS_game.h"
 
+#define INIT_STA STA_OPEN
+#define _GETPOS(x,y,w) ((y)*(w)+(x))
+
 void init_ran_num();//seed値を設定
 void init_disp();//画面の初期化
 void select_level(Board_t *board);//難易度選択

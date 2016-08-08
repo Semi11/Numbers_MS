@@ -11,6 +11,7 @@ void game_main(){
   init_board(&board);
   disp_board(board);
   _PRESSENTER();
+
 }
 
 void disp_board(const Board_t board){
@@ -20,9 +21,9 @@ void disp_board(const Board_t board){
   _CLRDISP();
 
   for(i=board.width * board.height-1;i >= 0 ;i--){
-    int x,y;
-    x=i%(board.width+1)+wall;
-    y=i/(board.width+1)+wall;
+    int x =i%(board.width)+wall;
+    int y = i/(board.width)+wall;
+
     switch(board.chip[i].status){
     case STA_CLOSE:
       disp_str("#",x,y,WHITE);break;
