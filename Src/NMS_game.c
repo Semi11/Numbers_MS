@@ -2,7 +2,7 @@
 
 #include "NMS_game.h"
 #include "NMS_init.h"
-#include "disp.h"
+#include "NMS_io.h"
 
 void game_main(){
   Board_t board;

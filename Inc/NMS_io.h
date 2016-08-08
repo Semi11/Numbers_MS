@@ -1,4 +1,4 @@
-/*NMS_disp.h*/
+/*NMS_io.h*/
 
 #ifndef _INCLUDE_NMS_DISP_
 #define _INCLUDE_NMS_DISP_

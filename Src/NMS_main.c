@@ -4,6 +4,7 @@
 #include"NMS_game.h"
 
 int main(void){
+  init_ran_num();
   init_disp();
   
   while(1){

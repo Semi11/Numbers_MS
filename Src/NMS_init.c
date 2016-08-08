@@ -2,7 +2,7 @@
 
 #include<stdlib.h>
 #include<time.h>
-#include"disp.h"
+#include"NMS_io.h"
 #include"NMS_game.h"
 
 void init_ran_num(){

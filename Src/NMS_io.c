@@ -1,7 +1,7 @@
-/*NMS_disp.c*/
+/*NMS_io.c*/
 
 #include<stdio.h>
-#include"disp.h"
+#include"NMS_io.h"
 
 void disp_str(char str[],int x,int y,int color){
   printf("%c[%dm",ESC,color);
