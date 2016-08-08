@@ -15,30 +15,37 @@ void init_disp(){
 }
 
 void select_level(Board_t *board){
-  int level;
-  disp_str("難易度を選んでください",0,0,WHITE);
-  disp_str("0:Easy",0,2,GREEN);
-  disp_str("1:Normal",0,3,YELLOW);
-  disp_str("2:Hard",0,4,RED);
-  disp_str("Select(0~2)->",0,6,WHITE);
-  scanf("%d",&level);
+  int level,flg=1;
+  while(flg){
+    flg=0;
+    disp_str("難易度を選んでください",0,0,WHITE);
+    disp_str("0:Easy",0,2,GREEN);
+    disp_str("1:Normal",0,3,YELLOW);
+    disp_str("2:Hard",0,4,RED);
+    disp_str("Select(0~2)->",0,6,WHITE);
+    scanf("%d",&level);
 
-  switch(level){
-  case EASY:
-    board->width = EASY_WIDTH;
-    board->height = EASY_HEIGHT;
-    board->bom_num = EASY_MINE_NUM;
-    break;
-  case NORMAL:
-    board->width = NORMAL_WIDTH;
-    board->height = NORMAL_HEIGHT;
-    board->bom_num = NORMAL_MINE_NUM;
-    break;
-  case HARD:
-    board->width = HARD_WIDTH;
-    board->height = HARD_HEIGHT;
-    board->bom_num = HARD_MINE_NUM;
-    break;
+    switch(level){
+    case EASY:
+      board->width = EASY_WIDTH;
+      board->height = EASY_HEIGHT;
+      board->bom_num = EASY_MINE_NUM;
+      break;
+    case NORMAL:
+      board->width = NORMAL_WIDTH;
+      board->height = NORMAL_HEIGHT;
+      board->bom_num = NORMAL_MINE_NUM;
+      break;
+    case HARD:
+      board->width = HARD_WIDTH;
+      board->height = HARD_HEIGHT;
+      board->bom_num = HARD_MINE_NUM;
+      break;
+    default:
+      flg=1;
+      break;
+    }
+    _CLRDISP();
   }
 }
 
@@ -82,7 +89,7 @@ void init_board(Board_t *board){
 
   /* ボードの状態を全てcloseにし、個数分だけ地雷を設置 */
   for(i=0;i<board_size;i++){
-    board->chip[i].status=STA_CLOSE;
+    board->chip[i].status=STA_OPEN;//CLOSE;
     if(i < board->bom_num)board->chip[i].data=MINE;
     else board->chip[i].data=NONE;
   }

@@ -15,7 +15,7 @@
 #define CYAN 36
 #define WHITE 37
 #define _CLRDISP()  printf("%c[2J",ESC);//画面をクリア
-#define _PRESSENTER() (void)getchar();//Enterキー入力待機
+#define _PRESSENTER() while(getchar()!='\n');//Enterキー入力待機
 
 void disp_str(char str[],int x,int y,int color);//座標、文字色を指定して出力
 
