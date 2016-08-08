@@ -23,7 +23,7 @@ void select_level(Board_t *board){
     disp_str("1:Normal",0,3,YELLOW);
     disp_str("2:Hard",0,4,RED);
     disp_str("Select(0~2)->",0,6,WHITE);
-    scanf("%d",&level);
+    input_num(&level);
 
     switch(level){
     case EASY:
