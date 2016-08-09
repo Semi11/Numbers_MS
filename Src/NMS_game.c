@@ -80,7 +80,7 @@ void select_square(Board_t *board){
 
   disp_str("行動を選んでください",disp_x,disp_y+1,WHITE);
   disp_str("0:開く",disp_x,disp_y+2,GREEN);
-  disp_str("1:旗を立てる",disp_x,disp_y+3,BLUE);
+  disp_str("1:旗を立てる/おろす",disp_x,disp_y+3,BLUE);
   disp_str("2:キャンセル",disp_x,disp_y+4,YELLOW);
   disp_str("Select(0~2)->",disp_x,disp_y+5,WHITE);
 
@@ -90,7 +90,11 @@ void select_square(Board_t *board){
     open_square(board,sq_num);
     break;
   case SLC_FLG:
-    board->squares[sq_num].status=STA_FLG;
+    if(board->squares[sq_num].status == STA_CLOSE){
+      board->squares[sq_num].status=STA_FLG;
+    }else if(board->squares[sq_num].status == STA_FLG){
+      board->squares[sq_num].status=STA_CLOSE;
+    }
     break;
   default:return;
   }
