@@ -18,6 +18,8 @@
 #define EASY_MINE_NUM 10
 #define NORMAL_MINE_NUM 40
 #define HARD_MINE_NUM 99 
+#define BOARD_POS_X 4
+#define BOARD_POS_Y 5
 #define NONE 0
 #define MINE 100
 #define WALL 101
@@ -46,6 +48,7 @@ typedef struct{
 
 void game_main();//ゲームのメインループ
 void disp_board(const Board_t board);//ボードの表示
+void disp_wall(int x,int y,int width,int height);//壁の表示
 void select_square(Board_t *board);//マスの選択
 void open_square(Board_t *board,int pos);//マスを開く
 void open_none(Board_t *board,int pos);//周りに地雷のないマスを開く

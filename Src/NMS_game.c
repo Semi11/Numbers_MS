@@ -20,16 +20,13 @@ void game_main(){
 
 void disp_board(const Board_t board){
   int i,x,y;
-  const int wall=2;
-  const int board_pos_x=2;
-  const int board_pos_y=4;
 
   _CLRDISP();
 
   for(i=board.size-1;i >= 0 ;i--){
     int data=board.squares[i].data;
-    x = i%board.width*2+board_pos_x+wall;
-    y = i/board.width+board_pos_y+wall;
+    x = i%board.width*2+BOARD_POS_X;
+    y = i/board.width+BOARD_POS_Y;
 
     switch(board.squares[i].status){
     case STA_CLOSE:
@@ -46,6 +43,7 @@ void disp_board(const Board_t board){
       case 7: disp_str("7",x,y,BLUE);break;
       case 8: disp_str("8",x,y,GREEN);break;
       case MINE: disp_str("*",x,y,RED);break;
+      case WALL: disp_wall(x,y,board.width,board.height);break;
       default: disp_str("E",x,y,RED);break;//エラー
       }
       break;
@@ -53,19 +51,22 @@ void disp_board(const Board_t board){
       disp_str("!",x,y,RED);break;
     }
   }
-
   
-  for(x=board.width-1;x>=0;x--){
-    if(x>=10)disp_num(x/10,x*2+board_pos_x+wall,board_pos_y-1,WHITE);
-    disp_num(x%10,x*2+board_pos_x+wall,board_pos_y,WHITE);
-    disp_str("--",x*2+board_pos_x+wall,board_pos_y+1,WHITE);
+  for(x=board.width-WALL_SIZE-1;x>=0;x--){
+    if(x>=10)disp_num(x/10,x*2+BOARD_POS_X+WALL_SIZE,BOARD_POS_Y-2,WHITE);
+    disp_num(x%10,x*2+BOARD_POS_X+WALL_SIZE,BOARD_POS_Y-1,WHITE);
   }
-  for(y=board.height-1;y>=0;y--){
-    disp_str("|",board_pos_x+1,y+board_pos_y+wall,WHITE);
-    disp_num(y,board_pos_x-1,y+board_pos_y+wall,WHITE);
+  for(y=board.height-WALL_SIZE-1;y>=0;y--){
+    disp_num(y,BOARD_POS_X-2,y+BOARD_POS_Y+1,WHITE);
   }
-  disp_str("+",board_pos_x+1,board_pos_y+1,WHITE);
 
+}
+
+void disp_wall(int x,int y,int width,int height){
+  if((x==BOARD_POS_X &&(y==BOARD_POS_Y || y==BOARD_POS_Y+height-1)))disp_str("+-",x,y,WHITE);
+  else if((y==BOARD_POS_Y && x==BOARD_POS_X+width*2-2)||(y==BOARD_POS_Y+height-1 && x==BOARD_POS_X+width*2-2))disp_str("+",x,y,WHITE);
+  else if(x==BOARD_POS_X || x==BOARD_POS_X+width*2-2)disp_str("|",x,y,WHITE);
+  else if(y==BOARD_POS_Y || y==BOARD_POS_Y+height-1)disp_str("--",x,y,WHITE);
 }
       
 void select_square(Board_t *board){
