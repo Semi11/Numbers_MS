@@ -104,11 +104,10 @@ void select_square(Board_t *board){
 void open_square(Board_t *board,int pos){
   if(board->squares[pos].status != STA_CLOSE)return;
   
-  switch(board->squares[pos].data){
-  case NONE:open_none(board,pos);break;
-  case MINE:
-  default:board->squares[pos].status = STA_OPEN;
-  }
+  if(board->squares[pos].data==NONE)
+    open_none(board,pos);
+  else 
+    board->squares[pos].status = STA_OPEN;
 
 }
 

@@ -8,17 +8,19 @@
 #define EASY 0
 #define NORMAL 1
 #define HARD 2
-#define EASY_WIDTH 10
-#define EASY_HEIGHT 10
-#define NORMAL_WIDTH 16
-#define NORMAL_HEIGHT 16
-#define HARD_WIDTH 25
-#define HARD_HEIGHT 25
+#define WALL_SIZE 2
+#define EASY_WIDTH 10+WALL_SIZE
+#define EASY_HEIGHT 10+WALL_SIZE
+#define NORMAL_WIDTH 16+WALL_SIZE
+#define NORMAL_HEIGHT 16+WALL_SIZE
+#define HARD_WIDTH 25+WALL_SIZE
+#define HARD_HEIGHT 25+WALL_SIZE
 #define EASY_MINE_NUM 10
 #define NORMAL_MINE_NUM 40
 #define HARD_MINE_NUM 99 
 #define NONE 0
-#define MINE -1
+#define MINE 100
+#define WALL 101
 #define SLC_OPEN 0
 #define SLC_FLG 1
 
@@ -26,6 +28,7 @@ enum {
   STA_CLOSE,
   STA_OPEN,
   STA_FLG,
+  STA_WALL,
 };
 
 typedef struct{
