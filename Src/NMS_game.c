@@ -80,6 +80,7 @@ void select_square(Board_t *board){
 
   if(input_num(&sq_num))return;
   if(sq_num<0 || sq_num>=(board->size))return;
+  sq_num = sq_num + board->width+1 +(sq_num/(board->width-WALL_SIZE) * WALL_SIZE);//選択番号を見た目どおりにする
   
   disp_str("行動を選んでください",disp_x,disp_y+1,WHITE);
   disp_str("0:開く",disp_x,disp_y+2,GREEN);
@@ -124,7 +125,7 @@ void open_none(Board_t *board,int pos){
 
   open_square(board,_GETPOS(x-1,y-1,width));//左上
   open_square(board,_GETPOS(x,y-1,width));//上
-  open_square(board,_GETPOS(x+1,y-1,width));//右上  
+  open_square(board,_GETPOS(x+1,y-1,width));//右上
   open_square(board,_GETPOS(x+1,y,width));//右
   open_square(board,_GETPOS(x+1,y+1,width));//右下
   open_square(board,_GETPOS(x,y+1,width));//下
