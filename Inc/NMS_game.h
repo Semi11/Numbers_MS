@@ -43,7 +43,7 @@ typedef struct{
   int width;
   int height;
   int size;
-  int bom_num;
+  int mine_num;
 }Board_t;
 
 void game_main();//ゲームのメインループ
@@ -52,6 +52,9 @@ void disp_wall(int x,int y,int width,int height);//壁の表示
 void select_square(Board_t *board);//マスの選択
 void open_square(Board_t *board,int pos);//マスを開く
 void open_none(Board_t *board,int pos);//周りに地雷のないマスを開く
+int should_continue_game(const Board_t board);//ゲームの続行判定
+void process_game_cleaed();//ゲームクリア時の処理
+void process_game_over();//ゲームオーバー時の処理
 
 #endif
 

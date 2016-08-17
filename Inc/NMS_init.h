@@ -5,7 +5,7 @@
 
 #include"NMS_game.h"
 
-#define INIT_STA STA_CLOSE
+#define INIT_STA STA_FLG
 #define _GETPOS(x,y,w) ((y)*(w)+(x))
 
 void init_ran_num();//seed値を設定

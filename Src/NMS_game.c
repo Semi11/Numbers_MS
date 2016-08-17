@@ -14,6 +14,7 @@ void game_main(){
   while(game_flg){
     disp_board(board);
     select_square(&board);
+    game_flg = should_continue_game(board);
   }
 
 }
@@ -92,7 +93,7 @@ void select_square(Board_t *board){
     break;
   case SLC_FLG:
     if(board->squares[sq_num].status == STA_CLOSE){
-      board->squares[sq_num].status=STA_FLG;
+      board->squares[sq_num].status = STA_FLG;
     }else if(board->squares[sq_num].status == STA_FLG){
       board->squares[sq_num].status=STA_CLOSE;
     }
@@ -109,7 +110,6 @@ void open_square(Board_t *board,int pos){
     open_none(board,pos);
   else 
     board->squares[pos].status = STA_OPEN;
-
 }
 
 void open_none(Board_t *board,int pos){
@@ -170,6 +170,39 @@ void open_none(Board_t *board,int pos){
 
 }
 
+int should_continue_game(const Board_t board){
+  int i,mine_cnt=0;
+
+  for(i=0;i<board.size;i++){
+    if(board.squares[i].data==MINE){
+      if(board.squares[i].status==STA_OPEN){
+	process_game_over();
+	return 0;
+      }else if(board.squares[i].status==STA_FLG){
+	mine_cnt++;
+      }
+    }else if(board.squares[i].status==STA_FLG){
+      mine_cnt--;
+    }
+  }
+  
+  if(mine_cnt==board.mine_num){
+    process_game_cleaed();
+    return 0;
+  }
+
+  return 1;
+}
+
+void process_game_cleaed(){
+  disp_str("Game clear",30,15,YELLOW);
+  _PRESSENTER();
+}
+
+void process_game_over(){
+  disp_str("Game over",30,15,RED);
+  _PRESSENTER();
+}
 
 
 

@@ -10,7 +10,6 @@ int main(void){
   while(1){
     title();
     game_main();
-    break;
   }
 
   return 0;

@@ -32,17 +32,17 @@ void select_level(Board_t *board){
     case EASY:
       board->width = EASY_WIDTH;
       board->height = EASY_HEIGHT;
-      board->bom_num = EASY_MINE_NUM;
+      board->mine_num = EASY_MINE_NUM;
       break;
     case NORMAL:
       board->width = NORMAL_WIDTH;
       board->height = NORMAL_HEIGHT;
-      board->bom_num = NORMAL_MINE_NUM;
+      board->mine_num = NORMAL_MINE_NUM;
       break;
     case HARD:
       board->width = HARD_WIDTH;
       board->height = HARD_HEIGHT;
-      board->bom_num = HARD_MINE_NUM;
+      board->mine_num = HARD_MINE_NUM;
       break;
     default:
       flg=1;
@@ -75,7 +75,7 @@ void init_board(Board_t *board){
       	board->squares[pos].data=WALL;
       }else{
 	 board->squares[pos].status=INIT_STA;
-	 if(cnt < board->bom_num){
+	 if(cnt < board->mine_num){
 	   board->squares[pos].data=MINE;
 	   cnt++;
 	 }else{ 
