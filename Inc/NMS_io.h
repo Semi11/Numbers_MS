@@ -19,6 +19,7 @@
 
 void disp_str(char str[],int x,int y,int color);//座標、文字色を指定して文字列を出力
 void disp_num(int num,int x,int y,int color);//座標、文字色を指定して数字を出力
+int kbhit(void);//キー入力を感知
 int input_num(int *num);//数字の入力
 
 #endif
