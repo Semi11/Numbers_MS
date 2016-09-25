@@ -40,8 +40,28 @@ int kbhit(void){
     return 1;
   }
 
-  return 0;
+  return 0;  
+}
+
+int input_real_time_key(int *ch){
+
+  if(!kbhit())return 0;
+
+  *ch = getchar();
+
+  return 1;
+}
+
+int input_arrow_RT(void){
+  int ch;
   
+  if(input_real_time_key(&ch)){
+    if(ch == ARROW){
+      switch(getchar()){
+      case LEFT_ARROW: return 0;
+      }
+    }
+  }
 }
 
 int input_num(int *num){

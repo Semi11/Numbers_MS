@@ -5,31 +5,30 @@
 #include "NMS_io.h"
 
 void game_main(){
-  Board_t board;
+  Square_t squares[SIZE];
   int game_flg=1;
 
-  select_level(&board);
-  init_board(&board);
+  init_board(squares);
   
   while(game_flg){
-    disp_board(board);
-    select_square(&board);
-    game_flg = should_continue_game(board);
+    disp_board(squares);
+    select_square(squares);
+    game_flg = should_continue_game(squares);
   }
 
 }
 
-void disp_board(const Board_t board){
+void disp_board(const Square_t squares[]){
   int i,x,y;
   
   _CLRDISP();
 
-  for(i=board.size-1;i >= 0 ;i--){
-    int data=board.squares[i].data;
-    x = i%board.width*2+BOARD_POS_X;
-    y = i/board.width+BOARD_POS_Y;
+  for(i=SIZE-1;i >= 0 ;i--){
+    int data=squares[i].data;
+    x = i%WIDTH*2+BOARD_POS_X;
+    y = i/WIDTH+BOARD_POS_Y;
 
-    switch(board.squares[i].status){
+    switch(squares[i].status){
     case STA_CLOSE:
       disp_str("#",x,y,WHITE);break;
     case STA_OPEN:
@@ -44,7 +43,7 @@ void disp_board(const Board_t board){
       case 7: disp_str("7",x,y,BLUE);break;
       case 8: disp_str("8",x,y,GREEN);break;
       case MINE: disp_str("*",x,y,RED);break;
-      case WALL: disp_wall(x,y,board.width,board.height);break;
+      case WALL: disp_wall(x,y,WIDTH,HEIGHT);break;
       default: disp_str("E",x,y,RED);break;//エラー
       }
       break;
@@ -53,12 +52,12 @@ void disp_board(const Board_t board){
     }
   }
   
-  for(x=board.width-WALL_SIZE-1;x>=0;x--){
+  for(x=WIDTH-WALL_SIZE-1;x>=0;x--){
     if(x>=10)disp_num(x/10,x*2+BOARD_POS_X+WALL_SIZE,BOARD_POS_Y-2,WHITE);
     disp_num(x%10,x*2+BOARD_POS_X+WALL_SIZE,BOARD_POS_Y-1,WHITE);
   }
 
-  for(y=board.height-WALL_SIZE-1;y>=0;y--){
+  for(y=HEIGHT-WALL_SIZE-1;y>=0;y--){
     disp_num(y,BOARD_POS_X-2,y+BOARD_POS_Y+1,WHITE);
   }
 
@@ -71,16 +70,16 @@ void disp_wall(int x,int y,int width,int height){
   else if(y==BOARD_POS_Y || y==BOARD_POS_Y+height-1)disp_str("--",x,y,WHITE);
 }
       
-void select_square(Board_t *board){
+void select_square(Square_t squares[]){
   int sq_num,action;
-  const int disp_x = board->width*2 +5;
+  const int disp_x = WIDTH*2 +5;
   const int disp_y = 5;
 
   disp_str("マスを選んでください->",disp_x,disp_y,WHITE);
 
   if(input_num(&sq_num))return;
-  if(sq_num<0 || sq_num>=(board->size))return;
-  sq_num = sq_num + board->width+1 +(sq_num/(board->width-WALL_SIZE) * WALL_SIZE);//選択番号を見た目どおりにする
+  if(sq_num<0 || sq_num>=(SIZE))return;
+  sq_num = sq_num + WIDTH+1 +(sq_num/(WIDTH-WALL_SIZE) * WALL_SIZE);//選択番号を見た目どおりにする
   
   disp_str("行動を選んでください",disp_x,disp_y+1,WHITE);
   disp_str("0:開く",disp_x,disp_y+2,GREEN);
@@ -92,13 +91,13 @@ void select_square(Board_t *board){
   
   switch(action){
   case SLC_OPEN:
-    open_square(board,sq_num);
+    open_square(squares,sq_num);
     break;
   case SLC_FLG:
-    if(board->squares[sq_num].status == STA_CLOSE){
-      board->squares[sq_num].status = STA_FLG;
-    }else if(board->squares[sq_num].status == STA_FLG){
-      board->squares[sq_num].status=STA_CLOSE;
+    if(squares[sq_num].status == STA_CLOSE){
+      squares[sq_num].status = STA_FLG;
+    }else if(squares[sq_num].status == STA_FLG){
+      squares[sq_num].status=STA_CLOSE;
     }
     break;
   default:return;
@@ -106,51 +105,51 @@ void select_square(Board_t *board){
 
 }
 
-void open_square(Board_t *board,int pos){
-  if(board->squares[pos].status != STA_CLOSE)return;
+void open_square(Square_t *squares,int pos){
+  if(squares[pos].status != STA_CLOSE)return;
   
-  if(board->squares[pos].data==NONE)
-    open_none(board,pos);
+  if(squares[pos].data==NONE)
+    open_none(squares,pos);
   else 
-    board->squares[pos].status = STA_OPEN;
+    squares[pos].status = STA_OPEN;
 }
 
-void open_none(Board_t *board,int pos){
-  const int width = board->width;
-  const int height = board->height;
-  int x = pos % board->width;
-  int y = pos / board->width; 
+void open_none(Square_t *squares,int pos){
+  const int width = WIDTH;
+  const int height = HEIGHT;
+  int x = pos % WIDTH;
+  int y = pos / WIDTH; 
 
-  board->squares[pos].status = STA_OPEN;
+  squares[pos].status = STA_OPEN;
 
-  open_square(board,_GETPOS(x-1,y-1,width));//左上
-  open_square(board,_GETPOS(x,y-1,width));//上
-  open_square(board,_GETPOS(x+1,y-1,width));//右上
-  open_square(board,_GETPOS(x+1,y,width));//右
-  open_square(board,_GETPOS(x+1,y+1,width));//右下
-  open_square(board,_GETPOS(x,y+1,width));//下
-  open_square(board,_GETPOS(x-1,y+1,width));//左下
-  open_square(board,_GETPOS(x-1,y,width));//左
+  open_square(squares,_GETPOS(x-1,y-1,width));//左上
+  open_square(squares,_GETPOS(x,y-1,width));//上
+  open_square(squares,_GETPOS(x+1,y-1,width));//右上
+  open_square(squares,_GETPOS(x+1,y,width));//右
+  open_square(squares,_GETPOS(x+1,y+1,width));//右下
+  open_square(squares,_GETPOS(x,y+1,width));//下
+  open_square(squares,_GETPOS(x-1,y+1,width));//左下
+  open_square(squares,_GETPOS(x-1,y,width));//左
 
 }
 
-int should_continue_game(const Board_t board){
+int should_continue_game(const Square_t squares[]){
   int i,mine_cnt=0;
 
-  for(i=0;i<board.size;i++){
-    if(board.squares[i].data==MINE){
-      if(board.squares[i].status==STA_OPEN){
+  for(i=0;i<SIZE;i++){
+    if(squares[i].data==MINE){
+      if(squares[i].status==STA_OPEN){
 	process_game_over();
 	return 0;
-      }else if(board.squares[i].status==STA_FLG){
+      }else if(squares[i].status==STA_FLG){
 	mine_cnt++;
       }
-    }else if(board.squares[i].status==STA_FLG){
+    }else if(squares[i].status==STA_FLG){
       mine_cnt--;
     }
   }
   
-  if(mine_cnt==board.mine_num){
+  if(mine_cnt==MINE_NUM){
     process_game_cleaed();
     return 0;
   }
