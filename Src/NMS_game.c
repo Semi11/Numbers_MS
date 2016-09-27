@@ -25,8 +25,8 @@ void disp_board(const Square_t squares[]){
 
   for(i=SIZE-1;i >= 0 ;i--){
     int data=squares[i].data;
-    x = i%WIDTH*2+BOARD_POS_X;
-    y = i/WIDTH+BOARD_POS_Y;
+    x = i % WIDTH * 2 + BOARD_POS_X;
+    y = i / WIDTH + BOARD_POS_Y;
 
     switch(squares[i].status){
     case STA_CLOSE:
@@ -72,8 +72,8 @@ void disp_wall(int x,int y,int width,int height){
       
 void select_square(Square_t squares[]){
   int sq_num,action;
-  const int disp_x = WIDTH*2 +5;
-  const int disp_y = 5;
+  const int disp_x = 0;
+  const int disp_y = HEIGHT + WALL_SIZE + BOARD_POS_Y;
 
   disp_str("マスを選んでください->",disp_x,disp_y,WHITE);
 
@@ -105,7 +105,7 @@ void select_square(Square_t squares[]){
 
 }
 
-void open_square(Square_t *squares,int pos){
+void open_square(Square_t squares[],int pos){
   if(squares[pos].status != STA_CLOSE)return;
   
   if(squares[pos].data==NONE)
@@ -114,7 +114,7 @@ void open_square(Square_t *squares,int pos){
     squares[pos].status = STA_OPEN;
 }
 
-void open_none(Square_t *squares,int pos){
+void open_none(Square_t squares[],int pos){
   const int width = WIDTH;
   const int height = HEIGHT;
   int x = pos % WIDTH;

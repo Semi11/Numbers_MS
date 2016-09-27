@@ -15,7 +15,7 @@ void init_disp(){
   _CLRDISP();
 }
 
-void init_board(Square_t *squares){
+void init_board(Square_t squares[]){
   int i,x,y,cnt=0;
 
   /* マスの状態を全て初期状態にし、個数分だけ地雷を設置 */
@@ -23,7 +23,7 @@ void init_board(Square_t *squares){
     for(x=0;x<WIDTH;x++){
       int pos=_GETPOS(x,y,WIDTH);
 
-      if(y==0 || x==0 || y==HEIGHT-1 || x==WIDTH-1){
+      if(y==0 || x==0 || y==HEIGHT -1 || x==WIDTH -1){
 	squares[pos].status=STA_OPEN;
       	squares[pos].data=WALL;
       }else{
