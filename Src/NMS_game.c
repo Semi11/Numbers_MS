@@ -5,15 +5,18 @@
 #include "NMS_io.h"
 
 void game_main(){
-  Square_t squares[SIZE];
-  int game_flg=1;
+  Square_t squares[SIZE];//全マス
 
   init_board(squares);
   
-  while(game_flg){
+  while(1){
     disp_board(squares);
-    select_square(squares);
-    game_flg = should_continue_game(squares);
+
+    if(should_continue_game(squares)){
+      select_square(squares);
+    }else{
+      break;
+    }
   }
 
 }
@@ -77,7 +80,9 @@ void select_square(Square_t squares[]){
 
   disp_str("マスを選んでください->",disp_x,disp_y,WHITE);
 
-  if(input_num(&sq_num))return;
+  sq_num = input_num();
+
+  if(sq_num == -1)return;
   if(sq_num<0 || sq_num>=(SIZE))return;
   sq_num = sq_num + WIDTH+1 +(sq_num/(WIDTH-WALL_SIZE) * WALL_SIZE);//選択番号を見た目どおりにする
   
@@ -87,7 +92,9 @@ void select_square(Square_t squares[]){
   disp_str("2:キャンセル",disp_x,disp_y+4,YELLOW);
   disp_str("Select(0~2)->",disp_x,disp_y+5,WHITE);
 
-  if(input_num(&action))return;
+  action = input_num();
+
+  if(action == -1)return;
   
   switch(action){
   case SLC_OPEN:

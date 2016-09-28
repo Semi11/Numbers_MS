@@ -16,23 +16,20 @@ void disp_num(int num,int x,int y,int color){
   printf("%c[39m",ESC);//文字色を元に戻す
 }
 
-int input_num(int *num){
+int input_num(){
   char buf[100];
   int i=0;  
-
-  *num='\0';
 
   fgets(buf,sizeof(buf),stdin);
 
   while(buf[i]!='\n'){
-    if(buf[i] < '0' || buf[i] > '9')return 1;
+    if(buf[i] < '0' || buf[i] > '9')return -1;
     i++;
   }
 
-  *num=atoi(buf);
-
-  return 0;
+  return atoi(buf);
 }
+
 
 
 

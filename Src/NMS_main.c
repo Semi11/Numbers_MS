@@ -8,7 +8,7 @@ int main(void){
   init_disp();
   
   while(1){
-    title();
+    if(title())break;
     game_main();
   }
 
