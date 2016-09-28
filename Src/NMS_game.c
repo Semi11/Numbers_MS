@@ -144,15 +144,23 @@ int should_continue_game(const Square_t squares[]){
   int i,mine_cnt=0;
 
   for(i=0;i<SIZE;i++){
-    if(squares[i].data==MINE){
-      if(squares[i].status==STA_OPEN){
-	process_game_over();
-	return 0;
-      }else if(squares[i].status==STA_FLG){
-	mine_cnt++;
+    switch(squares[i].status){
+    case STA_OPEN:
+      if(squares[i].data==MINE){
+	  process_game_over();
+	  return 0;    
       }
-    }else if(squares[i].status==STA_FLG){
-      mine_cnt--;
+      break;
+    case STA_CLOSE:
+      return 1;
+      break;
+    case STA_FLG:
+      if(squares[i].data==MINE){
+	mine_cnt++;
+      }else{
+	mine_cnt--;
+      }
+      break;
     }
   }
   
