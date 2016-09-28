@@ -153,7 +153,7 @@ int should_continue_game(const int squares_dat[], const int squares_sta[]){
       }
       break;
     case STA_CLOSE:
-      return 1;
+      mine_cnt--;
       break;
     case STA_FLG:
       if(squares_dat[i]==MINE){
