@@ -28,18 +28,13 @@ enum {
   STA_WALL,
 };
 
-typedef struct{
-  int status;
-  int data;
-}Square_t;
-
 void game_main();//ゲームのメインループ
-void disp_board(const Square_t square[]);//ボードの表示
+void disp_board(const int squares_dat[], const int squares_sta[]);//ボードの表示
 void disp_wall(int x,int y,int width,int height);//壁の表示
-void select_square(Square_t square[]);//マスの選択
-void open_square(Square_t square[],int pos);//マスを開く
-void open_none(Square_t square[],int pos);//周りに地雷のないマスを開く
-int should_continue_game(const Square_t square[]);//ゲームの続行判定
+void select_square(int squares_dat[], int squares_sta[]);//マスの選択
+void open_square(int squares_dat[], int squares_sta[],int pos);//マスを開く
+void open_none(int squares_dat[], int squares_sta[],int pos);//周りに地雷のないマスを開く
+int should_continue_game(const int squares_dat[], const int squares_sta[]);//ゲームの続行判定
 void process_game_cleaed();//ゲームクリア時の処理
 void process_game_over();//ゲームオーバー時の処理
 

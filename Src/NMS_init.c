@@ -15,7 +15,7 @@ void init_disp(){
   _CLRDISP();
 }
 
-void init_board(Square_t squares[]){
+void init_board(int squares_dat[], int squares_sta[]){
   int i,x,y,cnt=0;
 
   /* マスの状態を全て初期状態にし、個数分だけ地雷を設置 */
@@ -24,15 +24,15 @@ void init_board(Square_t squares[]){
       int pos=_GETPOS(x,y,WIDTH);
 
       if(y==0 || x==0 || y==HEIGHT -1 || x==WIDTH -1){
-	squares[pos].status=STA_OPEN;
-      	squares[pos].data=WALL;
+	squares_dat[pos]=STA_OPEN;
+      	squares_dat[pos]=WALL;
       }else{
-	 squares[pos].status=INIT_STA;
+	 squares_sta[pos]=INIT_STA;
 	 if(cnt < MINE_NUM){
-	   squares[pos].data=MINE;
+	   squares_dat[pos]=MINE;
 	   cnt++;
 	 }else{ 
-	   squares[pos].data=NONE;
+	   squares_dat[pos]=NONE;
 	 }
       }
 
@@ -44,35 +44,35 @@ void init_board(Square_t squares[]){
     for(x=1;x<=WIDTH-WALL_SIZE;x++){
       int _x = get_ran_num(1,WIDTH-WALL_SIZE);
       int _y = get_ran_num(1,HEIGHT-WALL_SIZE);
-      int buf = squares[_GETPOS(x,y,WIDTH)].data;
-      squares[_GETPOS(x,y,WIDTH)].data = squares[_GETPOS(_x,_y,WIDTH)].data;
-      squares[_GETPOS(_x,_y,WIDTH)].data = buf;
+      int buf = squares_dat[_GETPOS(x,y,WIDTH)];
+      squares_dat[_GETPOS(x,y,WIDTH)] = squares_dat[_GETPOS(_x,_y,WIDTH)];
+      squares_dat[_GETPOS(_x,_y,WIDTH)] = buf;
     }
   }
 
   /* 周りにある地雷の数をカウント */
   for(i=0;i<SIZE;i++){
-    if(squares[i].data == NONE){
-      count_around_mines(squares,i);
+    if(squares_dat[i] == NONE){
+      count_around_mines(squares_dat,i);
     }
   }
 
 }
 
-void count_around_mines(Square_t *squares,int pos){
+void count_around_mines(int squares_dat[],int pos){
   const int width = WIDTH;
   const int height = HEIGHT;
   int x = pos % WIDTH;
   int y = pos / WIDTH; 
 
-  if(squares[_GETPOS(x-1,y-1,width)].data == MINE)squares[pos].data++;//左上
-  if(squares[_GETPOS(x,y-1,width)].data   == MINE)squares[pos].data++;//上
-  if(squares[_GETPOS(x+1,y-1,width)].data == MINE)squares[pos].data++;//右上
-  if(squares[_GETPOS(x-1,y,width)].data   == MINE)squares[pos].data++;//左
-  if(squares[_GETPOS(x+1,y,width)].data   == MINE)squares[pos].data++;//右
-  if(squares[_GETPOS(x-1,y+1,width)].data == MINE)squares[pos].data++;//左下
-  if(squares[_GETPOS(x,y+1,width)].data   == MINE)squares[pos].data++;//下
-  if(squares[_GETPOS(x+1,y+1,width)].data == MINE)squares[pos].data++;//右下
+  if(squares_dat[_GETPOS(x-1,y-1,width)] == MINE)squares_dat[pos]++;//左上
+  if(squares_dat[_GETPOS(x,y-1,width)]   == MINE)squares_dat[pos]++;//上
+  if(squares_dat[_GETPOS(x+1,y-1,width)] == MINE)squares_dat[pos]++;//右上
+  if(squares_dat[_GETPOS(x-1,y,width)]   == MINE)squares_dat[pos]++;//左
+  if(squares_dat[_GETPOS(x+1,y,width)]   == MINE)squares_dat[pos]++;//右
+  if(squares_dat[_GETPOS(x-1,y+1,width)] == MINE)squares_dat[pos]++;//左下
+  if(squares_dat[_GETPOS(x,y+1,width)]   == MINE)squares_dat[pos]++;//下
+  if(squares_dat[_GETPOS(x+1,y+1,width)] == MINE)squares_dat[pos]++;//右下
 
 }
 

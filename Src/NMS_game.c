@@ -5,33 +5,34 @@
 #include "NMS_io.h"
 
 void game_main(){
-  Square_t squares[SIZE];//全マス
+  int squares_dat[SIZE];//全マスのデータ
+  int squares_sta[SIZE];//全マスの状態
 
-  init_board(squares);
+  init_board(squares_dat, squares_sta);
   
   while(1){
-    disp_board(squares);
-
-    if(should_continue_game(squares)){
-      select_square(squares);
+    disp_board(squares_dat, squares_sta);
+    
+    if(should_continue_game(squares_dat, squares_sta)){
+      select_square(squares_dat, squares_sta);
     }else{
       break;
     }
   }
-
+  
 }
 
-void disp_board(const Square_t squares[]){
+void disp_board(const int squares_dat[], const int squares_sta[]){
   int i,x,y;
   
   _CLRDISP();
 
   for(i=SIZE-1;i >= 0 ;i--){
-    int data=squares[i].data;
+    int data=squares_dat[i];
     x = i % WIDTH * 2 + BOARD_POS_X;
     y = i / WIDTH + BOARD_POS_Y;
 
-    switch(squares[i].status){
+    switch(squares_sta[i]){
     case STA_CLOSE:
       disp_str("#",x,y,WHITE);break;
     case STA_OPEN:
@@ -73,7 +74,7 @@ void disp_wall(int x,int y,int width,int height){
   else if(y==BOARD_POS_Y || y==BOARD_POS_Y+height-1)disp_str("--",x,y,WHITE);
 }
       
-void select_square(Square_t squares[]){
+void select_square(int squares_dat[], int squares_sta[]){
   int sq_num,action;
   const int disp_x = 0;
   const int disp_y = HEIGHT + WALL_SIZE + BOARD_POS_Y;
@@ -98,13 +99,13 @@ void select_square(Square_t squares[]){
   
   switch(action){
   case SLC_OPEN:
-    open_square(squares,sq_num);
+    open_square(squares_dat, squares_sta,sq_num);
     break;
   case SLC_FLG:
-    if(squares[sq_num].status == STA_CLOSE){
-      squares[sq_num].status = STA_FLG;
-    }else if(squares[sq_num].status == STA_FLG){
-      squares[sq_num].status=STA_CLOSE;
+    if(squares_sta[sq_num] == STA_CLOSE){
+      squares_sta[sq_num] = STA_FLG;
+    }else if(squares_sta[sq_num] == STA_FLG){
+      squares_sta[sq_num]=STA_CLOSE;
     }
     break;
   default:return;
@@ -112,41 +113,41 @@ void select_square(Square_t squares[]){
 
 }
 
-void open_square(Square_t squares[],int pos){
-  if(squares[pos].status != STA_CLOSE)return;
+void open_square(int squares_dat[], int squares_sta[], int pos){
+  if(squares_sta[pos] != STA_CLOSE)return;
   
-  if(squares[pos].data==NONE)
-    open_none(squares,pos);
+  if(squares_dat[pos]==NONE)
+    open_none(squares_dat, squares_sta, pos);
   else 
-    squares[pos].status = STA_OPEN;
+    squares_sta[pos] = STA_OPEN;
 }
 
-void open_none(Square_t squares[],int pos){
+void open_none(int squares_dat[], int squares_sta[], int pos){
   const int width = WIDTH;
   const int height = HEIGHT;
   int x = pos % WIDTH;
   int y = pos / WIDTH; 
 
-  squares[pos].status = STA_OPEN;
+  squares_sta[pos] = STA_OPEN;
 
-  open_square(squares,_GETPOS(x-1,y-1,width));//左上
-  open_square(squares,_GETPOS(x,y-1,width));//上
-  open_square(squares,_GETPOS(x+1,y-1,width));//右上
-  open_square(squares,_GETPOS(x+1,y,width));//右
-  open_square(squares,_GETPOS(x+1,y+1,width));//右下
-  open_square(squares,_GETPOS(x,y+1,width));//下
-  open_square(squares,_GETPOS(x-1,y+1,width));//左下
-  open_square(squares,_GETPOS(x-1,y,width));//左
+  open_square(squares_dat, squares_sta, _GETPOS(x-1,y-1,width));//左上
+  open_square(squares_dat, squares_sta, _GETPOS(x,y-1,width));//上
+  open_square(squares_dat, squares_sta, _GETPOS(x+1,y-1,width));//右上
+  open_square(squares_dat, squares_sta, _GETPOS(x+1,y,width));//右
+  open_square(squares_dat, squares_sta, _GETPOS(x+1,y+1,width));//右下
+  open_square(squares_dat, squares_sta, _GETPOS(x,y+1,width));//下
+  open_square(squares_dat, squares_sta, _GETPOS(x-1,y+1,width));//左下
+  open_square(squares_dat, squares_sta, _GETPOS(x-1,y,width));//左
 
 }
 
-int should_continue_game(const Square_t squares[]){
+int should_continue_game(const int squares_dat[], const int squares_sta[]){
   int i,mine_cnt=0;
 
   for(i=0;i<SIZE;i++){
-    switch(squares[i].status){
+    switch(squares_sta[i]){
     case STA_OPEN:
-      if(squares[i].data==MINE){
+      if(squares_dat[i]==MINE){
 	  process_game_over();
 	  return 0;    
       }
@@ -155,7 +156,7 @@ int should_continue_game(const Square_t squares[]){
       return 1;
       break;
     case STA_FLG:
-      if(squares[i].data==MINE){
+      if(squares_dat[i]==MINE){
 	mine_cnt++;
       }else{
 	mine_cnt--;
