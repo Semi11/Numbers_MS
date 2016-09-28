@@ -24,7 +24,7 @@ void init_board(int squares_dat[], int squares_sta[]){
       int pos=_GETPOS(x,y,WIDTH);
 
       if(y==0 || x==0 || y==HEIGHT -1 || x==WIDTH -1){
-	squares_dat[pos]=STA_OPEN;
+	squares_sta[pos]=STA_OPEN;
       	squares_dat[pos]=WALL;
       }else{
 	 squares_sta[pos]=INIT_STA;
