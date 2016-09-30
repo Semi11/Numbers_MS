@@ -27,15 +27,18 @@ void init_board(int squares_dat[], int squares_sta[]){
 	squares_sta[pos]=STA_OPEN;
       	squares_dat[pos]=WALL;
       }else{
-	 squares_sta[pos]=INIT_STA;
-	 if(cnt < MINE_NUM){
-	   squares_dat[pos]=MINE;
-	   cnt++;
-	 }else{ 
-	   squares_dat[pos]=NONE;
-	 }
+	squares_sta[pos]=INIT_STA;
+	if(cnt < MINE_NUM){
+	  squares_dat[pos]=MINE;
+	  cnt++;
+	}else if(cnt < MINE_NUM + TREASURE_NUM){
+	  squares_dat[pos]=TREASURE;
+	  cnt++;
+	}else{ 
+	  squares_dat[pos]=NONE;
+	}
       }
-
+      
     }
   }
     
@@ -50,7 +53,7 @@ void init_board(int squares_dat[], int squares_sta[]){
     }
   }
 
-  /* 周りにある地雷の数をカウント */
+  /* 周りにある地雷と宝物の数をカウント */
   for(i=0;i<SIZE;i++){
     if(squares_dat[i] == NONE){
       count_around_mines(squares_dat,i);
@@ -65,14 +68,14 @@ void count_around_mines(int squares_dat[],int pos){
   int x = pos % WIDTH;
   int y = pos / WIDTH; 
 
-  if(squares_dat[_GETPOS(x-1,y-1,width)] == MINE)squares_dat[pos]++;//左上
-  if(squares_dat[_GETPOS(x,y-1,width)]   == MINE)squares_dat[pos]++;//上
-  if(squares_dat[_GETPOS(x+1,y-1,width)] == MINE)squares_dat[pos]++;//右上
-  if(squares_dat[_GETPOS(x-1,y,width)]   == MINE)squares_dat[pos]++;//左
-  if(squares_dat[_GETPOS(x+1,y,width)]   == MINE)squares_dat[pos]++;//右
-  if(squares_dat[_GETPOS(x-1,y+1,width)] == MINE)squares_dat[pos]++;//左下
-  if(squares_dat[_GETPOS(x,y+1,width)]   == MINE)squares_dat[pos]++;//下
-  if(squares_dat[_GETPOS(x+1,y+1,width)] == MINE)squares_dat[pos]++;//右下
+  if(squares_dat[_GETPOS(x-1,y-1,width)] == MINE || squares_dat[_GETPOS(x-1,y-1,width)] == TREASURE)squares_dat[pos]++;//左上
+  if(squares_dat[_GETPOS(x,y-1,width)]   == MINE || squares_dat[_GETPOS(x,y-1,width)] == TREASURE)squares_dat[pos]++;//上
+  if(squares_dat[_GETPOS(x+1,y-1,width)] == MINE || squares_dat[_GETPOS(x+1,y-1,width)] == TREASURE)squares_dat[pos]++;//右上
+  if(squares_dat[_GETPOS(x-1,y,width)]   == MINE || squares_dat[_GETPOS(x-1,y,width)] == TREASURE)squares_dat[pos]++;//左
+  if(squares_dat[_GETPOS(x+1,y,width)]   == MINE || squares_dat[_GETPOS(x+1,y,width)] == TREASURE)squares_dat[pos]++;//右
+  if(squares_dat[_GETPOS(x-1,y+1,width)] == MINE || squares_dat[_GETPOS(x-1,y+1,width)] == TREASURE)squares_dat[pos]++;//左下
+  if(squares_dat[_GETPOS(x,y+1,width)]   == MINE || squares_dat[_GETPOS(x,y+1,width)] == TREASURE)squares_dat[pos]++;//下
+  if(squares_dat[_GETPOS(x+1,y+1,width)] == MINE || squares_dat[_GETPOS(x+1,y+1,width)] == TREASURE)squares_dat[pos]++;//右下
 
 }
 

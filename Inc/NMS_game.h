@@ -12,12 +12,14 @@
 #define WIDTH ((10) + (WALL_SIZE))
 #define HEIGHT ((10) + (WALL_SIZE))
 #define SIZE (WIDTH) * (HEIGHT)
-#define MINE_NUM 10
+#define MINE_NUM 9
+#define TREASURE_NUM 1
 #define BOARD_POS_X 4
 #define BOARD_POS_Y 5
 #define NONE 0
-#define MINE 100
-#define WALL 101
+#define TREASURE 100
+#define MINE 101
+#define WALL 102
 #define SLC_OPEN 0
 #define SLC_FLG 1
 

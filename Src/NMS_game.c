@@ -46,6 +46,7 @@ void disp_board(const int squares_dat[], const int squares_sta[]){
       case 6: disp_str("6",x,y,CYAN);break;
       case 7: disp_str("7",x,y,BLUE);break;
       case 8: disp_str("8",x,y,GREEN);break;
+      case TREASURE: disp_str("$",x,y,YELLOW);break;
       case MINE: disp_str("*",x,y,RED);break;
       case WALL: disp_wall(x,y,WIDTH,HEIGHT);break;
       default: disp_str("E",x,y,RED);break;//エラー
