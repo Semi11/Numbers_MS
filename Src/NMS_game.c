@@ -76,7 +76,7 @@ void disp_wall(int x,int y,int width,int height){
 }
       
 void select_square(int squares_dat[], int squares_sta[]){
-  int sq_num,action;
+  int sq_num,action,i;
   const int disp_x = 0;
   const int disp_y = HEIGHT + WALL_SIZE + BOARD_POS_Y;
 
@@ -100,7 +100,25 @@ void select_square(int squares_dat[], int squares_sta[]){
   
   switch(action){
   case SLC_OPEN:
+
+    for(i=sq_num + 1;i<SIZE;i++){
+      if(squares_dat[i] == TREASURE){
+	disp_str("答えはもっと大きいです",disp_x,disp_y+7,WHITE);
+	_PRESSENTER()
+	  break;
+      }
+    }
+    
+    for(i=sq_num - 1;i>=0;i--){
+      if(squares_dat[i] == TREASURE){
+	disp_str("答えはもっと小さいです",disp_x,disp_y+7,WHITE);
+	_PRESSENTER()
+	  break;
+      }
+    }
+  
     open_square(squares_dat, squares_sta,sq_num);
+    
     break;
   case SLC_FLG:
     if(squares_sta[sq_num] == STA_CLOSE){
@@ -115,6 +133,7 @@ void select_square(int squares_dat[], int squares_sta[]){
 }
 
 void open_square(int squares_dat[], int squares_sta[], int pos){
+
   if(squares_sta[pos] != STA_CLOSE)return;
   
   if(squares_dat[pos]==NONE)
