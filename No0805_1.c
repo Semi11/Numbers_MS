@@ -59,7 +59,6 @@ void disp_board(const int squares_dat[], const int squares_sta[]);//ボードの
 void disp_wall(int x,int y,int width,int height);//壁の表示
 void select_square(int squares_dat[], int squares_sta[]);//マスの選択
 void open_square(int squares_dat[], int squares_sta[],int pos);//マスを開く
-void open_none(int squares_dat[], int squares_sta[],int pos);//周りに地雷のないマスを開く
 int should_continue_game(const int squares_dat[], const int squares_sta[]);//ゲームの続行判定
 void process_game_cleaed();//ゲームクリア時の処理
 void process_game_over();//ゲームオーバー時の処理
@@ -329,32 +328,21 @@ void select_square(int squares_dat[], int squares_sta[]){
 }
 
 void open_square(int squares_dat[], int squares_sta[], int pos){
+  int i,cnt=0;
 
-  if(squares_sta[pos] != STA_CLOSE)return;
+  if(squares_sta[pos] != STA_OPEN && squares_sta[pos] != STA_CLOSE)return;
   
-  if(squares_dat[pos]==NONE)
-    open_none(squares_dat, squares_sta, pos);
-  else 
-    squares_sta[pos] = STA_OPEN;
-}
-
-void open_none(int squares_dat[], int squares_sta[], int pos){
-  const int width = WIDTH;
-  const int height = HEIGHT;
-  int x = pos % WIDTH;
-  int y = pos / WIDTH; 
-
   squares_sta[pos] = STA_OPEN;
 
-  open_square(squares_dat, squares_sta, _GETPOS(x-1,y-1,width));//左上
-  open_square(squares_dat, squares_sta, _GETPOS(x,y-1,width));//上
-  open_square(squares_dat, squares_sta, _GETPOS(x+1,y-1,width));//右上
-  open_square(squares_dat, squares_sta, _GETPOS(x+1,y,width));//右
-  open_square(squares_dat, squares_sta, _GETPOS(x+1,y+1,width));//右下
-  open_square(squares_dat, squares_sta, _GETPOS(x,y+1,width));//下
-  open_square(squares_dat, squares_sta, _GETPOS(x-1,y+1,width));//左下
-  open_square(squares_dat, squares_sta, _GETPOS(x-1,y,width));//左
-
+  for(i=0;i<AROUND_SQUARE_NUM;i++){
+    if(squares_sta[pos + around_square_idx[i]] == STA_FLG)cnt++;
+  }
+  if(cnt == squares_dat[pos]){
+    for(i=0;i<AROUND_SQUARE_NUM;i++){
+      if(squares_sta[pos + around_square_idx[i]]==STA_CLOSE) open_square(squares_dat,squares_sta,pos + around_square_idx[i]);
+    }
+  }
+  
 }
 
 int should_continue_game(const int squares_dat[], const int squares_sta[]){
