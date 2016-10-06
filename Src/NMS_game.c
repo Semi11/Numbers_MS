@@ -162,36 +162,21 @@ void open_none(int squares_dat[], int squares_sta[], int pos){
 }
 
 int should_continue_game(const int squares_dat[], const int squares_sta[]){
-  int i,mine_cnt=0,get_treasure_flg=0;
+  int i;
   
   for(i=0;i<SIZE;i++){
-    switch(squares_sta[i]){
-    case STA_OPEN:
-      if(squares_dat[i]==MINE){
+    if(squares_sta[i] == STA_OPEN){
+      switch(squares_dat[i]){
+      case MINE:
 	process_game_over();
-	return 0;    
-      }else if(squares_dat[i]==TREASURE){
-	get_treasure_flg=1;
+	return 0;   
+      case TREASURE:
+	process_game_cleaed();
+	return 0;
       }
-      break;
-    case STA_CLOSE:
-      mine_cnt--;
-      break;
-    case STA_FLG:
-      if(squares_dat[i]==MINE){
-	mine_cnt++;
-      }else{
-	mine_cnt--;
-      }
-      break;
     }
   }
   
-  if(mine_cnt==MINE_NUM && get_treasure_flg){
-    process_game_cleaed();
-    return 0;
-  }
-
   return 1;
 }
 
