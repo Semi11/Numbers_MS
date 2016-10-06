@@ -163,7 +163,7 @@ void open_none(int squares_dat[], int squares_sta[], int pos){
 
 int should_continue_game(const int squares_dat[], const int squares_sta[]){
   int i,mine_cnt=0,get_treasure_flg=0;
-
+  
   for(i=0;i<SIZE;i++){
     switch(squares_sta[i]){
     case STA_OPEN:

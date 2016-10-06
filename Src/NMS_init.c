@@ -6,6 +6,10 @@
 #include"NMS_init.h"
 #include"NMS_game.h"
 
+#define AROUND_SQUARE_NUM 8
+
+const int around_square_idx[AROUND_SQUARE_NUM] = {-WIDTH-1,-WIDTH,-WIDTH+1,-1,+1,+WIDTH-1,WIDTH,WIDTH+1};
+
 void init_ran_num(){
   srand((unsigned int)time(NULL));
 }
@@ -63,20 +67,13 @@ void init_board(int squares_dat[], int squares_sta[]){
 }
 
 void count_around_mines(int squares_dat[],int pos){
-  const int width = WIDTH;
-  const int height = HEIGHT;
-  int x = pos % WIDTH;
-  int y = pos / WIDTH; 
+  int i;
 
-  if(squares_dat[_GETPOS(x-1,y-1,width)] == MINE || squares_dat[_GETPOS(x-1,y-1,width)] == TREASURE)squares_dat[pos]++;//左上
-  if(squares_dat[_GETPOS(x,y-1,width)]   == MINE || squares_dat[_GETPOS(x,y-1,width)] == TREASURE)squares_dat[pos]++;//上
-  if(squares_dat[_GETPOS(x+1,y-1,width)] == MINE || squares_dat[_GETPOS(x+1,y-1,width)] == TREASURE)squares_dat[pos]++;//右上
-  if(squares_dat[_GETPOS(x-1,y,width)]   == MINE || squares_dat[_GETPOS(x-1,y,width)] == TREASURE)squares_dat[pos]++;//左
-  if(squares_dat[_GETPOS(x+1,y,width)]   == MINE || squares_dat[_GETPOS(x+1,y,width)] == TREASURE)squares_dat[pos]++;//右
-  if(squares_dat[_GETPOS(x-1,y+1,width)] == MINE || squares_dat[_GETPOS(x-1,y+1,width)] == TREASURE)squares_dat[pos]++;//左下
-  if(squares_dat[_GETPOS(x,y+1,width)]   == MINE || squares_dat[_GETPOS(x,y+1,width)] == TREASURE)squares_dat[pos]++;//下
-  if(squares_dat[_GETPOS(x+1,y+1,width)] == MINE || squares_dat[_GETPOS(x+1,y+1,width)] == TREASURE)squares_dat[pos]++;//右下
-
+  for(i=0;i<AROUND_SQUARE_NUM;i++){
+    if(squares_dat[pos + around_square_idx[i]] == MINE || 
+       squares_dat[pos + around_square_idx[i]] == TREASURE)
+      squares_dat[pos]++;
+  }
 }
 
 int get_ran_num(int min,int max){
