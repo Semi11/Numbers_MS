@@ -22,13 +22,11 @@
 #define WALL 102
 #define SLC_OPEN 0
 #define SLC_FLG 1
+#define STA_CLOSE 0
+#define STA_OPEN 1
+#define STA_FLG 2
+#define STA_WALL 3
 
-enum {
-  STA_CLOSE,
-  STA_OPEN,
-  STA_FLG,
-  STA_WALL,
-};
 
 void game_main();//ゲームのメインループ
 void disp_board(const int squares_dat[], const int squares_sta[]);//ボードの表示
